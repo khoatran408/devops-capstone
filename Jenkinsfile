@@ -16,7 +16,6 @@ pipeline {
                  aquaMicroscanner imageName: 'nginx:latest', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'json'
               }
          }         
-         /*
          stage('Upload to AWS') {
               steps {
                   withAWS(region:'us-east-2',credentials:'aws-static') {
@@ -25,6 +24,5 @@ pipeline {
                   }
               }
          }
-         */
      }
 }
