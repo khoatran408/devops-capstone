@@ -1,12 +1,17 @@
 pipeline {
-     agent {
-         dockerfile true
-     }
+     agent any
      stages {
         
         stage('Lint HTML') {
             steps {
                 sh 'tidy -q -e *.html'
+            }
+        }
+        stage('Building imaga'){
+            steps{
+                script {
+                    docker.build("my-image:${env.BUILD_ID}")
+                }
             }
         }
      }         
@@ -23,14 +28,6 @@ pipeline {
                 }
             }
         } */ 
-node {
-        checkout scm
-
-        def customImage = docker.build("my-image:${env.BUILD_ID}")
-
-        customImage.inside {
-            sh 'make test'
-        } 
-    }      
+     
 
 }
