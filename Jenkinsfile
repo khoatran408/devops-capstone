@@ -9,16 +9,7 @@ pipeline {
                 sh 'tidy -q -e *.html'
             }
         }
-     }    
-    node {
-        checkout scm
-
-        def customImage = docker.build("my-image:${env.BUILD_ID}")
-
-        customImage.inside {
-            sh 'make test'
-        } 
-    }      
+     }         
         /* stage('Security Scan') {
             steps { 
                 aquaMicroscanner imageName: 'nginx:latest', notCompliesCmd: 'exit 1', onDisallowed: 'ignore', outputFormat: 'html'
@@ -32,5 +23,14 @@ pipeline {
                 }
             }
         } */ 
-     
+node {
+        checkout scm
+
+        def customImage = docker.build("my-image:${env.BUILD_ID}")
+
+        customImage.inside {
+            sh 'make test'
+        } 
+    }      
+
 }
