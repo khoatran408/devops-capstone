@@ -22,7 +22,7 @@ pipeline {
         stage('Upload to ECR') {
             steps {
                 script {
-                    docker.withRegistry('350373288714.dkr.ecr.us-west-2.amazonaws.com/udacity',aws-static) {
+                    docker.withRegistry('350373288714.dkr.ecr.us-west-2.amazonaws.com/udacity', 'aws-static') {
                         myImage.push("capstone")
                         myImage.push("latest")
                     }                    
