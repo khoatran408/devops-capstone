@@ -27,12 +27,7 @@ pipeline {
                         myImage.push("latest")
                     }                    
                 }    
-                }
             }
         } 
      }         
-               
-         
-     
-
 }
