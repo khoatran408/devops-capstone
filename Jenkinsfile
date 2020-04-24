@@ -15,20 +15,24 @@ pipeline {
         stage('Building image'){
             steps{
                 script {
-                    docker.build("my-image:${env.BUILD_ID}")
+                   myImage = docker.build("my-image:latest")
+                }
+            }
+        }
+        stage('Upload to ECR') {
+            steps {
+                script {
+                    docker.withRegistry('350373288714.dkr.ecr.us-west-2.amazonaws.com/udacity',aws-static) {
+                        myImage.push("capstone")
+                        myImage.push("latest")
+                    }                    
+                }    
                 }
             }
         } 
      }         
                
-        /* stage('Upload to AWS') {
-            steps {
-                withAWS(region:'us-west-2',credentials:'aws-static') {
-                sh 'echo "Uploading content with AWS creds"'
-                    s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'index.html', bucket:'khoa-udacity')
-                }
-            }
-        } */ 
+         
      
 
 }
