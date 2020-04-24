@@ -8,7 +8,8 @@ pipeline {
             steps {
                 sh 'tidy -q -e *.html'
             }
-        } 
+        }
+     }    
     node {
         checkout scm
 
@@ -16,7 +17,8 @@ pipeline {
 
         customImage.inside {
             sh 'make test'
-        }   
+        } 
+    }      
         /* stage('Security Scan') {
             steps { 
                 aquaMicroscanner imageName: 'nginx:latest', notCompliesCmd: 'exit 1', onDisallowed: 'ignore', outputFormat: 'html'
@@ -30,5 +32,5 @@ pipeline {
                 }
             }
         } */ 
-     }
+     
 }
