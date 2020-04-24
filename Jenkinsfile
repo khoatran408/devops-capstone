@@ -7,19 +7,20 @@ pipeline {
                 sh 'tidy -q -e *.html'
             }
         }
-        stage('Building imaga'){
+        stage('Security Scan') {
+            steps { 
+                aquaMicroscanner imageName: 'nginx:latest', notCompliesCmd: 'exit 1', onDisallowed: 'ignore', outputFormat: 'html'
+            }
+        } 
+        stage('Building image'){
             steps{
                 script {
                     docker.build("my-image:${env.BUILD_ID}")
                 }
             }
-        }
+        } 
      }         
-        /* stage('Security Scan') {
-            steps { 
-                aquaMicroscanner imageName: 'nginx:latest', notCompliesCmd: 'exit 1', onDisallowed: 'ignore', outputFormat: 'html'
-            }
-        } */         
+               
         /* stage('Upload to AWS') {
             steps {
                 withAWS(region:'us-west-2',credentials:'aws-static') {
