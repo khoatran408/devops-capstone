@@ -15,7 +15,7 @@ pipeline {
         stage('Building image'){
             steps{
                 script {
-                   myImage = docker.build("my-image:latest")
+                   docker.build("my-image:latest")
                 }
             }
         }
@@ -23,8 +23,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://350373288714.dkr.ecr.us-west-2.amazonaws.com', 'ecr:us-west-2:aws-static') {
-                        myImage.push("capstone")
-                        myImage.push("latest")
+                        docker.image('my-image:latest').push('latest')
                     }                    
                 }    
             }
