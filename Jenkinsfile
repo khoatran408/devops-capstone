@@ -9,7 +9,7 @@ pipeline {
                 sh 'tidy -q -e *.html'
             }
         } 
-        stage('Build') {
+        stage('Setup Build') {
             steps {
                 docker.build("my-image:${env.BUILD_ID}")
             }
