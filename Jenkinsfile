@@ -7,11 +7,11 @@ pipeline {
                 sh 'tidy -q -e *.html'
             }
         }
-        stage('Security Scan') {
+        /* stage('Security Scan') {
             steps { 
                 aquaMicroscanner imageName: 'nginx:latest', notCompliesCmd: 'exit 1', onDisallowed: 'ignore', outputFormat: 'html'
             }
-        } 
+        } */ 
         stage('Building image'){
             steps{
                 script {
