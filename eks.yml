@@ -1,0 +1,77 @@
+Description: >
+  Capstone / Udacity Cloud DevOps
+
+Parameters:
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+
+Resources:
+  eksClusterRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - eks.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy 
+
+  nodeGroupRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly    
+
+  myCluster:
+    Type: 'AWS::EKS::Cluster'
+    Properties: 
+      Name: prod
+      ResourcesVpcConfig: 
+        SubnetIds: 
+          - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
+          - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
+      RoleArn:  
+        !GetAtt eksClusterRole.Arn 
+
+  EKSNodegroup:
+    DependsOn: myCluster
+    Type: 'AWS::EKS::Nodegroup'
+    Properties:
+      ClusterName: prod
+      NodeRole: 
+        !GetAtt nodeGroupRole.Arn
+      ScalingConfig:
+        MinSize: 1
+        DesiredSize: 3
+        MaxSize: 5
+      Labels:
+        Key1: Value1
+        Key2: Value2
+      Subnets:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
+
+                    
+Outputs:
+  myCluster:
+    Description: public URL on EKS cluster
+    Value: !GetAtt myCluster.Endpoint
+    Export:
+      Name: !Sub ${EnvironmentName}-EKS-Capstone
