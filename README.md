@@ -1,4 +1,4 @@
-Deploy a CI/CD pipeline on Jenkins with simple nginx application "Hello World, my name is Khoa Tran.."
+Deploy a CI/CD pipeline on Jenkins with simple nginx application "Hello World, my name is Khoa Tran.. "
 Build jenkins server with plugins.
 Create network infrastructure: "sh create.sh network network.yml network-parameters.json"
 Create eks kubernetes on AWS: "sh create.sh eks eks.yml eks-parameters.json"
